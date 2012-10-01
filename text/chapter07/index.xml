@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='Shift_JIS' ?>
+
+<!DOCTYPE doc SYSTEM "../smartdoc.dtd"[
+<!ENTITY CHAPTER "chapter07">
+]>
+
+<doc xml:lang='ja'>
+
+	<head>
+		<title>たくさんのタートル</title>
+	</head>
+
+	<body>
+
+		<section title="学習目標">
+			<ul>
+				<li>オブジェクトの作成と命令を行うことができる</li>
+				<li>複数のオブジェクトを区別して命令を行うことができる</li>
+			</ul>
+		</section>
+
+		<section title="複数のタートルを使う">
+			<p>
+				オブジェクトタートル編では、いままで習った制御構造を利用して、簡単なゲームやアニメーションなどのアプリケーションを作っていきたいと思います。
+			</p>
+			<p>
+				アニメーションでは、「オブジェクト」と呼ばれるものを生成して、
+				そのオブジェクトに対して命令をすることになります。
+				その練習のために、まず、複数のタートルを扱ってみましょう。
+			</p>
+
+			<section title="2匹のタートルを使うプログラム">
+				<p>次のプログラムを見てみましょう。</p>
+
+				<text.turtle.applet class="TwoTurtles" chapter="&CHAPTER;"/>
+
+				<figure
+						title="2匹のタートルを使うプログラム"
+						src="image/twoturtles" style="scale:1.0"  />
+			</section>
+
+			<section title="タートル（オブジェクト）の生成">
+				<p>
+					タートル（オブジェクト）を一匹生成するには、次のような命令文を書きます。
+				</p>
+				<figure
+						title="タートル(オブジェクト)の生成"
+						src="image/newturtle" style="scale:1.0"  />
+			</section>
+
+			<section title="タートル(オブジェクト)への命令">
+				<p>
+					生成されたタートル（オブジェクト）に命令するには、次のような命令文を書きます。
+				</p>
+				<figure
+						title="タートル(オブジェクト)への命令"
+						src="image/objectcommand" style="scale:1.0"  />
+			</section>
+
+			<p>
+				このように、オブジェクトを生成して、
+				生成したオブジェクトに対して命令を行う手法を「オブジェクト指向プログラミング」といい、
+				現在のプログラミングでよく使われる手法です。
+			</p>
+		</section>
+
+		<section title="同時に動いているように見せるために">
+
+				<p>
+					オブジェクトはいくつでも生成することができます。
+					次のプログラムを見てみましょう。
+				</p>
+
+				<text.turtle.applet class="FourTurtles" chapter="&CHAPTER;"/>
+				<p>
+					このプログラムを下のプログラムと比較してみましょう。
+					（同じ図形を書くのですが、動きが異なるはずです。）
+				</p>
+
+				<text.turtle.applet class="FourTurtles2" chapter="&CHAPTER;"/>
+
+				<figure
+						title="4匹のタートルを使うプログラム(1)"
+						src="image/fourturtles1" style="scale:1.0"  />
+				<figure
+						title="4匹のタートルを使うプログラム(2)"
+						src="image/fourturtles2" style="scale:1.0"  />
+
+				<fyi title="コンピュータは同時に2度の命令をできない">
+					<p>
+						2つ目のプログラムでは、タートルを細かく切り替えて少しずつ動かすことによって、
+						4匹のタートルが同時に動いているように見せることができます。
+					</p>
+					<p>コンピュータは2つの仕事を同時に行うことはできません。
+					みなさんが使っているパソコンは、インターネットをやっている間にメールを見て、印刷しながらワープロも使ったりすることができます。
+					これは、実は、このタートルの例のように、細かく切り替えていろいろな仕事を少しずつしているからなのです。
+					</p>
+				</fyi>
+		</section>
+
+		<section title="練習問題">
+			<section title="タートルレース">
+				<p>以下の実行例のように、3匹のタートルがレースするプログラムを作ってみよう。</p>
+				<text.turtle.applet.nodownload class="TurtleRace" chapter="&CHAPTER;"/>
+
+				<fyi title="タートルレースで利用する命令">
+					<dl>
+						<dt>sleep([秒の指定])</dt>
+						<dd>指定された秒数だけ、コンピュータが眠り（止まり）ます。 1を入れれば1秒止まり、0.1入れれば0.1秒止まります。「ヨーイドン！」の時に使ってください。</dd>
+						<dt>hide()</dt>
+						<dd>最初から表示されている亀（カメ子）を消します。（別に消してなくても課題は受理しますけど、消したいですよね。）</dd>
+					</dl>
+				</fyi>
+				<p>ファイル名は「TurtleRace.java」とすること．</p>
+			</section>
+			
+			<section title="たくさんのタートルで絵を描こう">
+				<p>今まで描いた絵を、何匹かのタートルを使って、タートルの共同作業で描いてみよう。
+				（複数のタートルが同時に動作するのは難しいので、やらなくて良い）</p>
+				<p>ファイル名は「ManyTurtles.java」とすること．</p>
+			</section>
+			
+			<section title="星と五角形を同時に描こう">
+				<p>以下の実行例のように、2匹のタートルがそれぞれ星と五角形を同時に描くようなアニメーションを作ろう。
+				（難易度高め）</p>
+				<text.turtle.applet.nodownload class="Concurrent" chapter="&CHAPTER;"/>
+				<p>ファイル名は「Concurrent.java」とすること．</p>
+			</section>	
+		</section>
+
+	</body>
+</doc>
+
+

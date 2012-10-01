@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='Shift_JIS' ?>
+
+<!DOCTYPE doc SYSTEM "../smartdoc.dtd"[
+<!ENTITY CHAPTER "chapter17">
+]>
+
+<doc xml:lang='ja'>
+
+	<head>
+		<title>文字列とアルゴリズム</title>
+	</head>
+
+	<body>
+
+	<section title="学習目標">
+		<ul>
+			<li>ファイル読み書きAPIを使えるようになる．</li>
+			<li>文字列操作のアルゴリズムについて理解する．</li>
+			<li>APIドキュメントの存在を知り，簡単なものは読み，使えるようになる．</li>
+		</ul>
+	</section>
+	
+	<section title="ファイル入出力">
+		<p>タートルにはファイルの入出力のための便利なメソッドがついています．</p>
+		<text.turtle.applet class="FileIOSample" chapter="&CHAPTER;" />
+		<section title="ファイル入出力の仕様">
+			<dl>
+				<dt>void saveToFile(String filename, String text)</dt>
+				<dd>textの内容をファイルに保存します．</dd>									
+				<dt>String loadFromFile(String filename)</dt>
+				<dd>ファイルから文字列を読み込み，戻り値として返します．</dd>
+				<dt>String loadFromFile(String filename, String enc)</dt>
+				<dd>文字コードを指定して，ファイルを読み込みます．encの実引数例="Shift_JIS", "EUC-JP", "UTF-8"など．</dd>				
+			</dl>
+		</section>		
+	</section>
+	
+	<section title="APIとJavaAPIドキュメント">
+		<p>API（Application Programming Interface）とは，アプリケーション（みなさんが作るプログラム）が利用できるメソッドのことです．
+			<ul>
+				<li><a href="http://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%95%E3%82%A7%E3%83%BC%E3%82%B9">WikipediaによるAPIの説明</a></li>
+			</ul>
+		</p>
+		<p>タートルプログラムは，松澤が開発した（している）プログラムで，rt(),fd()などのメソッドがAPIとして提供されています．
+		<a href="&CHAPTER;/src/TurtleSrc.zip">ここ</a>から，ソースをダウンロードできるようにしました．
+		</p>
+		<p>Java標準ライブラリの説明書は，以下にあります．	
+			<ul>
+				<li>Javaの取扱説明書 <a href="http://java.sun.com/javase/ja/6/docs/ja/"></a></li>
+				<li>Java API説明書 <a href="http://java.sun.com/javase/ja/6/docs/ja/api/index.html"></a></li>
+			</ul>
+			Java標準ライブラリは，クラス単位で閲覧することが出来ます．
+		</p>
+		<p>
+			今日使うString(文字列)クラスのAPIを読んでみましょう．
+			<ul>
+				<li>Java Stringクラス API <a href="http://java.sun.com/javase/ja/6/docs/ja/api/java/lang/String.html"></a></li>
+			</ul>
+			特に，char charAt(int), int indexOf(String), String[] split(String), String subString(int), String subString(int, int)あたりを読んでおいてください．
+		</p>		
+	</section>
+	
+	<section title="作文遊び">
+		<p>ファイル読み込みとStringクラスライブラリを利用して，作文遊びのプログラムを書いてみましょう．</p>
+		<section title="作文さん">
+			<p>作文するプログラムです．</p>
+			<text.turtle.applet class="SakubunSan" chapter="&CHAPTER;" />
+			<p>入力するファイルは以下のような形式になっています．</p>
+			<p>Noun.txt</p>
+			<program>
+			<![CDATA[
+仕舞い
+綺
+洋裁
+組打ち
+畿内
+明き家			
+  .... (続く)
+]]>
+			</program>		
+			<p>Verb.txt</p>		
+			<program>
+			<![CDATA[
+引き込む
+すきかえす
+看取る
+睦む
+きこす			
+  .... (続く)
+]]>
+			</program>				
+		</section>
+		<section title="反転さん">
+			<p>文字列を反転するプログラムです．</p>
+			<text.turtle.applet class="HantenSan" chapter="&CHAPTER;" />
+		</section>
+		<section title="判定さん">
+			<p>回文かどうかを判定するプログラムです．</p>
+			<text.turtle.applet class="HanteiSan" chapter="&CHAPTER;" />
+		</section>
+		<section title="回文さん">
+			<p>回文を自動生成するプログラムです．</p>
+			<text.turtle.applet class="KaibunSan" chapter="&CHAPTER;" />
+		</section>						
+	</section>	
+
+	<section title="Webスクレイピング">
+		<section title="WebからHTMLの読み込み">
+			<p>loadFromFile(String)の引数にURLを入れると，Webページを取ってくることが出来ます．</p>
+			<!-- これは実行できない.固まるので要確認 accessdenied -->
+			<!-- <text.turtle.applet class="WebSample" chapter="&CHAPTER;" /> -->
+			<text.turtle.src class="WebSample" chapter="&CHAPTER;" />
+			<p>（このプログラムはアプレット上では実行できません．）</p>
+			<p>実行結果は次のようになります．</p>
+			<console>
+			<![CDATA[
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>静岡大学 情報学部</title>
+  .... (続く)
+]]>
+			</console>			
+		</section>		
+			
+		<section title="読み込んだHTMLからのスクレイピング">
+			<p>Webページのソースが取得できたら，そこから好きな情報を抜き出しましょう</p>
+			<text.turtle.src class="WeatherInfo" chapter="&CHAPTER;" />
+			<p>（このプログラムはアプレット上では実行できません．）</p>
+			
+			<p>このプログラムでは，</p>
+			<p>こんなHTMLが取ってこれるので
+			<console><![CDATA[
+(以前省略)....
+
+        <table border=0 cellpadding=2 cellspacing=1 width=100%>
+            <tr align=center><td><b>1月25日(水)</b></td></tr>
+            <tr align=center><td>
+               <img src="http://i.yimg.jp/images/weather/general/forecast/sun_clouds_st.gif" border="0" alt="晴時々曇"><br>
+            晴時々曇
+            </td></tr>
+        </table>
+			
+....（以後省略）
+			]]></console>
+
+			このHTMLから，「晴時々曇」を抜き出すために，Stringクラスの
+			<a href="http://java.sun.com/javase/ja/6/docs/ja/api/java/lang/String.html#indexOf%28java.lang.String%29">indexOf()</a>
+			と
+			<a href="http://java.sun.com/javase/ja/6/docs/ja/api/java/lang/String.html#substring%28int%29">substring(int beginIndex)</a>
+			メソッドを利用しています．
+			</p>
+			
+			<p>実行結果は次のようになります．</p>
+			<console>
+今日の浜松の天気は「晴時々曇」です			
+			</console>
+		</section>	
+	</section>
+
+	<section title="練習問題">
+	
+		<section title="ケンブリッジ変換">
+			<p>ある文章を入力すると，「ケンブリッジ変換」を自動的に行うプログラムを作ってみましょう．</p>
+			<p>
+				「ケンブリッジ変換」参考URL
+				<ul>
+					<li>http://steel-plate.jp/cambridge/</li>
+					<li>http://www.artsoftwareworks.net/modules/xpwiki/138.html</li>
+				</ul>	
+			</p>
+			
+			<p>ファイル名は「Cambridge.java」とすること．</p>
+		</section>
+		
+		<section title="CSVファイルの読み込み">
+			<p><a href="&CHAPTER;/src/score.csv">ここ</a>にある，ある中学校の成績データが記述されたCSV形式 のファイルを読み込み，
+			平均点を求めるプログラムを作ってみましょう．</p>
+			<p>CSVファイル：Comma Separated Valuesファイル，カンマ「,」でデータが区切られたファイル．</p>
+			<program src="src/score.csv"/>
+			<fyi title="ヒント">
+				<p>読み込んでからまず，split("\n")で各行に分割し，その後行毎にsplit(",")で各データを得ることが出来ます．</p>
+				<p>文字列型をint型に変換するには，int Integer.parseInt(String text)メソッドを使います．
+				リファレンスは<a href="http://java.sun.com/javase/ja/6/docs/ja/api/java/lang/Integer.html#parseInt%28java.lang.String%29">こちら</a>．
+				</p>
+			</fyi>
+			<p>ファイル名は「CSV.java」とすること．</p>
+		</section>
+		
+		<section title="問題3：Webマッシュアップ">
+			<p>すきなサイトから，必要な情報のみを取ってくるプログラムを書いてみましょう．</p>
+			<p>複数のサイトから情報を取ってきて，合成できるとなお良い！</p>
+			<p>ファイル名は「Mashup.java」とすること．</p>
+		</section>
+		
+	</section>
+
+	</body>
+</doc>
+
+

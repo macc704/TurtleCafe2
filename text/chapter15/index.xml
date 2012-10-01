@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='Shift_JIS' ?>
+
+<!DOCTYPE doc SYSTEM "../smartdoc.dtd"[
+<!ENTITY CHAPTER "chapter15">
+]>
+
+<doc xml:lang='ja'>
+
+	<head>
+		<title>集合データ構造とアルゴリズム（１）：並び替え</title>
+	</head>
+
+	<body>
+
+		<section title="学習目標">
+			<ul>
+				<li>リニア検索プログラムのアルゴリズムを理解する</li>
+				<li>最小値検索法の並び替えアルゴリズムを理解する</li>
+				<li>簡単なアルゴリズム（挿入法）を作れるようになる</li>
+			</ul>
+		</section>
+
+		<section title="カードプログラムの要素技術">
+		
+			<p>カードプログラムを記述するための，CardTurtleとButtonTurtleについて説明します．</p>
+			
+			<section title="CardTurtle">
+				<p>このプログラムは、１０枚のカードを入れ物１に入れ、１枚ずつ取り出して入れ物２に移すプログラムです。</p>
+				<text.turtle.applet class="MoveCards" chapter="&CHAPTER;" />
+				
+				<fyi title="do-while文">
+					<p>
+						while文とdo-while文は、両方とも繰り返しを表す文ですが、
+						条件判断の位置が違います。
+						while文は、最初に繰り返しを続けるかどうか調べて、続けるならば処理を行い、
+						続けないならば処理を抜ける、という構造をしています。
+						do-while文は、はじめに処理を行い、処理を行ったあとで、
+						繰り返しを続けるかどうか調べて、続けるならば２回目の処理を行い、続けないならば処理を抜ける、
+						という構造をしています。
+					</p>
+				</fyi>				
+					
+				<fyi title="break文">
+					<p>
+						このプログラムでは、アニメーションループを抜け出すためにbreak文を使用しています。
+						break文が繰り返し文（while文、for文、do/while文）の中で実行されると、
+						プログラムの処理の流れはただちに繰り返し構造から抜け出し、
+						制御が繰り返し構造の直後にある命令に移ります。
+					</p>
+					<p>
+						break文は、構造化プログラミング（入り口ひとつ、出口ひとつの処理構造）を破壊するものとして、
+						プログラミングの作法としてはあまりよくないものだと言われています。
+						break文を使わなくても、同じ処理の流れを定義することは可能なので、
+						プログラミングの作法を重んじるプログラマは、break文の代わりに変数を用いて繰り返し構造を制御し、
+						break文を使わないプログラムを記述します。
+					</p>
+				</fyi>
+				
+				<section title="CardTurtleの仕様">
+					<p>カードの内容には、文字列、小数、整数を入れることができます。</p>
+					<dl>
+						<dt>int getNumber()</dt>
+						<dd>カードの数字をint型で取得します（カードが数字でない場合は-1が返ります）</dd>
+						<dt>String getText()</dt>
+						<dd>カードの内容を文字列型で取得します</dd>					
+						<dt>String text()</dt>
+						<dd>カードの内容を文字列型で取得します(getText()を使ってください)</dd>
+						<dt>void text([カードの内容])</dt>
+						<dd>カードの内容を、指定したカードの内容に変えます</dd>
+						<dt>int fontsize()</dt>
+						<dd>カードの内容のフォントサイズを取得します</dd>
+						<dt>void fontsize(int size)</dt>
+						<dd>カードの内容のフォントサイズを指定します</dd>
+					</dl>
+				</section>
+			</section>
+			
+			<section title="ButtonTurtle">
+			
+				<p>ButtonTurtleはボタンが押されたことを検知することが出来るオブジェクトです．サンプルプログラムを下記します．</p>
+				<text.turtle.applet class="ButtonSample" chapter="&CHAPTER;" />								
+				<fyi title="ButtonTurtleを使うプログラム実行の注意">
+					<p>ボタンを使ったプログラムをアプレットで実行する際には、必ず、ボタンが表示されている画面を一度クリックしてください。
+					ボタンが表示されている画面をクリックしないと、ボタンへの入力が受け付けられません。</p>
+				</fyi>
+				
+				<p>ボタンを見張ることで，以下のように１ステップずつコマ送りできるプログラムを作ることができます．</p>
+				<text.turtle.applet class="MoveCards2" chapter="&CHAPTER;" />
+				
+				<fyi title="「!」（論理否定演算子）">
+					<p>「!」を論理否定演算子といい、真偽値を逆にする演算子です。!(true)=false、!(false)=trueとなります。
+						このプログラムに使われている!(StepButton.isClicked())は、ステップボタンが押されていたら、falseを返し、押されていなかったら、trueを返します。
+					</p>
+				</fyi>				
+			
+				<section title="ButtonTurtleの仕様">
+					<dl>
+						<dt>boolean isClicked()</dt>
+						<dd>ボタンがクリックされたか調べます</dd>					
+						<dt>String text()</dt>
+						<dd>ボタンのラベルを文字列型で取得します</dd>
+						<dt>void text([ボタンのラベル])</dt>
+						<dd>ボタンのラベルを、指定したボタンのラベルに変えます</dd>
+						<dt>int fontsize()</dt>
+						<dd>ボタンのラベルのフォントサイズを取得します</dd>
+						<dt>int fontsize(int size)</dt>
+						<dd>ボタンのラベルのフォントサイズを指定します</dd>
+					</dl>
+				</section>				
+			</section>
+				
+		</section>
+
+		<section title="並替えアルゴリズム">
+			<section title="並替えアルゴリズムの設計">
+				<p>アルゴリズムとは，何らかを実現する手順のことで，特に，小さい命令を組み合わせて，順序立てて実行することで，より大きな目的を達成する手順のことを指します．</p>
+				<p>アルゴリズムの初歩としてよく出てくる例として，並替えアルゴリズム（ソートアルゴリズム，ソーティングアルゴリズム）があります．
+				並び替えとは、ばらばらに並んでいるものを決まったならび（昇順や降順）に並び替えることを指します．このプログラムは，皆さんが習った技術を組み合わせて達成することが出来ます．</p>
+				<p/>
+				<p>並替えアルゴリズムはこれまでにたくさんの種類が提案されていますが，
+				ここでは手作業で考えやすい「最小値選択法」（データ構造とアルゴリズムではセレクションソートと呼ばれている技法です）について学んでみましょう．</p>
+				<p>以下に，手作業と，Squeakで実装されたプログラムのビデオがあります．</p>
+				<ul>
+					<li><a href="http://www.youtube.com/watch?v=_V6uxVFXL8k">最小値選択法(手作業)</a></li>
+					<li><a href="http://www.youtube.com/watch?v=X-YIWDIHAX4">最小値選択法(Squeak)</a></li>
+				</ul>
+				
+				<p>古典的ですが，基本的なアルゴリズムを設計するには有効な方法として，フローチャートを使った設計があります．ここでは，フローチャートで設計していきます．</p>
+				<p>まず，全体としては，最小値を探して，並替え済みの場所に置いていくという，次のようなフローチャートになります．</p>
+				<figure id="fig:SortLevel1"	title="SortLevel1" src="image/SortLevel1" style="scale:0.8" />
+				<p>「最小値を探す」という命令はありませんので，これもアルゴリズムで記述する必要があります．すでに知っている命令を組み合わせると，次のようになります．</p>
+				<figure id="fig:Search"	title="Search" src="image/Search" style="scale:0.8" />
+				<p>二つのフローチャートの関係は次のようになります．</p>
+				<figure id="fig:SortAndSearch"	title="SortAndSearch" src="image/SortAndSearch" style="scale:0.8" />
+				<p>これを一つに記述すると，全体としては次のようなアルゴリズムになります．</p>													
+				<figure id="fig:SortAll"	title="SortAll" src="image/SortAll" style="scale:0.8" />
+			</section>
+			
+			<section title="最小値検索プログラム">
+				<p>最小値検索を実装したプログラムです．</p>
+				<text.turtle.applet class="LinearSearch" chapter="&CHAPTER;" />
+				<fyi title="実装">
+					<p>設計に対して，それを実現するものを作ることを「実装」と呼び，ソフトウェア業界ではよく使われる言葉です．</p>
+				</fyi>		
+				<fyi title="日本語の変数名">
+					<p>Javaでは，変数名，メソッド名，クラス名に日本語が使えます．</p>
+					<p>（ただし，ファイル名の文字コードで問題が生じるため，クラス名に日本語をつけるのはお控えください）</p>
+				</fyi>	
+			</section>
+			
+			<section title="最小値選択法による並替えプログラム">
+				<p>最小値選択法を実装したプログラムです．</p>
+				<text.turtle.applet class="SelectionSort" chapter="&CHAPTER;" />
+			</section>
+		</section>
+
+		<section title="練習問題">
+			<section title="ミニ問題集">
+				<section title="問題(1)">
+					<p>ランダムな数が書かれたカードが１０枚入った入れ物を作ろう。</p>
+					<p>ファイル名は「TenShuffledCards.java」とすること．</p>  
+				</section>
+				<section title="問題(2)">
+					<p>
+						１０枚のカードが入った入れ物と、「カーソルを１進める」というボタンを用意し、
+						ボタンを押すとカーソルを１進めるプログラムを作ってみよう。
+					</p>
+					<p>ファイル名は「MoveCursor.java」とすること．</p>  
+				</section>
+				<section title="問題(3)">
+					<p>
+						0から9までの数が書かれたカードが１０枚入った入れ物を作り、１秒に１回かきまぜて、
+						かきまぜるたびに「先頭にある数は○○です」と表示するプログラムを作ろう。
+					</p>
+					<p>ファイル名は「ShuffleAndHead.java」とすること．</p>  
+				</section>
+				<section title="問題(4)">
+					<p>
+						ユーザに「何番目のカードを選びますか？」と表示し、ユーザからカーソル位置の入力を受けつけ、
+						１０枚のカードが入った入れ物から、ユーザが入力した位置にあるカードの数字を取得し、
+						「あなたの選んだカードに書かれている数は○○ですね」と表示するプログラムを作ろう。
+					</p>
+					<p>ファイル名は「SelectionCardNumber.java」とすること．</p>
+				</section>
+			</section>
+			
+			<section title="挿入法の並替えプログラムを作ろう">
+
+    			<p>下の実行例を参考に，挿入法の並べ替えアルゴリズムのフローチャートを書き，プログラムを作りましょう．</p>
+				<ul>
+					<li><a href="http://www.youtube.com/watch?v=bDODQXHOhVM">挿入法(手作業)</a></li>
+    				<li><a href="http://www.youtube.com/watch?v=3US3rD-Ptvg">挿入法(Squeak)</a></li>
+    			</ul>
+    			
+    			<p>ファイル名は「InsertionSort.java」とすること．</p>    			
+			
+				<!-- 
+				<p>スタート・ストップ・リセット・ステップなどのボタンはつけなくてかまいません。</p>
+				<text.turtle.applet.nodownload class="InsertionSortWithButton"	chapter="&CHAPTER;" />
+				-->
+			</section>
+			
+			<section title="アルゴリズムを改良しよう">
+    			<p>検索済束を使わずに最小値選択法をプログラムしてみよう．</p>
+    			
+    			<p>ファイル名は「ImprovedSort.java」とすること．</p>  
+			</section>
+		</section>
+		
+		<!-- 
+		<section title="グローバル変数">
+					<p>
+						このプログラムでは、はじめに、クラスブロック内で変数を宣言しています。
+						このように、クラスブロック内で宣言された変数をグローバル変数
+						<note>
+							Javaでは、このような変数を正式にはインスタンス変数と言います。
+							ここでは、クラスのメソッドに対してグローバルな変数である、という意味で、ローカル変数と対比する概念として、グローバル変数という表現を用いています。
+						</note>
+						といいます。指定されたブロック内（たとえば、あるメソッド内）でしか有効でない変数をローカル変数といいます。
+						グローバル変数の有効範囲は、クラス全体です。そのクラスのどのメソッドからも使うことができます。
+					</p>
+					<program>
+						<![CDATA[
+ 13: 	// 入れ物
+ 14: 	HolderTurtle holder1;
+ 15: 	HolderTurtle holder2;
+
+]]>
+					</program>
+					<p>
+						このプログラムでは、holder1とholder2をグローバル変数として宣言し、
+						startメソッドと初期化するメソッドの２つのメソッドで、これらの変数を使っています。
+					</p>
+					<p>
+						グローバル変数は、クラス内のどのメソッドからも値を変更できるため、プログラムが意図しない動作をしたとき、どのメソッドで値が変更されたかを読み解くことが困難になります。
+						このようにプログラムの保守性が下がるため、グローバル変数の使用は、プログラミングの作法としてはあまりよくないものだと言われています。
+					</p>
+					<p>
+						しかし、ある変数が多くのメソッドで使われる場合、グローバル変数を使わなければ、毎回変数を引数として渡さなければならず、面倒です。
+						そのため、ある変数が多くのメソッドで使われる場合、グローバル変数として宣言することがあります。
+					</p>
+					<p>
+						このプログラムでは、startメソッドと初期化するメソッドの両方で、holder1とholder2という変数を使っているため、
+						この２つをグローバル変数として宣言しています。
+					</p>
+				</section>
+				-->
+
+
+	</body>
+</doc>
+
+

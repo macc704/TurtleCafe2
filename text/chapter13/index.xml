@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='Shift_JIS' ?>
+
+<!DOCTYPE doc SYSTEM "../smartdoc.dtd"[
+<!ENTITY CHAPTER "chapter13">
+]>
+
+<doc xml:lang='ja'>
+
+	<head>
+		<title>再帰プログラムとその「美」</title>
+	</head>
+
+	<body>
+
+		<section title="学習目標">
+			<ul>
+				<li>メソッドの再帰呼出しとその実行過程を理解する</li>
+				<li>再帰プログラム，再帰構造の美しさを楽しむ</li>
+			</ul>
+		</section>
+		
+		<section title="再帰呼び出し">
+			<section title="あらまし">
+				<p>メソッドが自分自身を呼び出す処理を、再帰メソッド呼び出しと言う。(実は自分自身を呼び出すように見えて，もう一つのコピーを呼び出しているだけなのですがね．)</p>
+				<p>メソッドの再帰呼び出しを使うことで，いろいろな面白いプログラムが書ける．</p>				
+			</section>
+			
+			<section title="階乗計算">
+				<p>文系の諸君にはあまりなじみがないかもしれないが，階乗という概念がある．</p>
+				<p>nの階乗は１からnまでの数を掛け合わせたもので，n!と書く．次に例を示す．</p>
+				<ul>
+					<li>2! = 2 * 1 = 2</li>
+					<li>3! = 3 * 2 * 1 = 6</li>
+					<li>4! = 4 * 3 * 2 * 1 = 12</li>
+				</ul>
+				<p>nの階乗は以下の式で求められる．</p>
+				<ul>
+					<li>n! = n * (n-1)!</li>
+				</ul>
+				<p>つまり，n-1の階乗が求められれば，それにnをかけることでnの階乗が求められる．</p>
+				<p>この式を応用し，再帰を使うことで，階乗を求めるプログラムを次のように書ける．</p>
+				<text.turtle.applet class="Factorial" chapter="&CHAPTER;"/>
+				
+				<fyi title="再帰の終点">
+					<p>上記の例ではfactorial()メソッドからfactorial()メソッドを呼んでいるので，再帰の終点を作ってやらないと呼出しが無限に続いて，プログラムが止まらなくなる．
+					（実際には，呼び出すごとにメソッドがスタックと呼ばれるメモリに読み込まれるので，そのメモリがいっぱいになってStackOverFlowErrorというエラーを出して止まる．</p>
+					<p>したがって，どこかで止めるプログラムを書かなければならない．上記の例では，</p>
+					<program>
+						<![CDATA[
+if (n == 1) {
+	result = 1;
+}]]>
+					</program>
+					<p>の部分がそれにあたる．</p>
+				</fyi>
+				
+				<p>再帰のプログラムはメソッドの中で自分自身のメソッドを呼び出しているのが特徴だが，自分自身に見えるけれども実は新たなコピーを作り，呼び出しているだけである．</p>				
+				<p>このコピーの様子を視覚化して理解するために，呼出し過程を図示してみよう．</p>								
+				<text.turtle.applet class="FactorialWithPrint" chapter="&CHAPTER;"/>
+				<console>
+					<![CDATA[
+factorial(5)
+	factorial(4)
+		factorial(3)
+			factorial(2)
+				factorial(1)
+				// return 1
+			// return 2
+		// return 6
+	// return 24
+// return 120]]>			
+				</console>
+				<p>異なる引数でメソッドが呼ばれているだけということが分かったと思う．</p>
+				
+				<p>（ちなみに，階乗の計算は総和と同じように繰り返しでも書ける．）</p>
+			</section>
+			
+			<section title="フィボナッチ数列">
+				<p>フィボナッチ数列という数列がある．これも文系の諸君にはあまりなじみがないかもしれないが，
+				自然界によくみられる不思議な数列である．（<a href="http://www.rd.mmtr.or.jp/~bunryu/pain1.shtml">この</a>サイトなどをみてみよう）</p>
+				<p>fib(n)は次の式で求められる．</p>
+				<ul>
+					<li>fib(n) = fib(n-1) + fib(n-2)</li>
+				</ul>
+				<p>以下が具体例である．</p>
+				<ul>
+					<li>fib(1) = 1</li>
+					<li>fib(2) = 2</li>
+					<li>fib(3) = fib(2) + fib(1) = 3</li>
+					<li>fib(4) = fib(3) + fib(2) = 5</li>
+					<li>fib(5) = fib(4) + fib(3) = 8</li>
+					<li>fib(6) = fib(5) + fib(4) = 13</li>					
+				</ul>
+				<p>フィボナッチ数列も再帰の例でよく出てくる例で，再帰を使うことでプログラムを次のように書ける．</p>
+				<text.turtle.applet class="Fibonacci" chapter="&CHAPTER;"/>
+				<p>これも呼出し過程を図示してみよう</p>	
+				<text.turtle.applet class="FibonacciWithPrint" chapter="&CHAPTER;"/>
+				<console>
+					<![CDATA[
+fib(5)
+	fib(4)
+		fib(3)
+			fib(2)
+			// return 2
+			fib(1)
+			// return 1
+		// return 3
+		fib(2)
+		// return 2
+	// return 5
+	fib(3)
+		fib(2)
+		// return 2
+		fib(1)
+		// return 1
+	// return 3
+// return 8]]>			
+				</console>
+								
+				<fyi title="再帰とプログラムの効率">
+					<p>最後の例の呼出し過程をよく見るとfib(1)とかfib(2)は何回も呼ばれており，大変効率が悪いプログラムである．</p>
+					<p>再帰プログラムでは，プログラムが計算式と似たように，わかりやすく書ける代わりに，効率が悪くなることがある．（絶対にそうなるわけではない）</p>
+					<p>上記のフィボナッチ数列のプログラムは，fib(20)くらいまでは動作するが，fib(50)ではコンピュータはお手上げ状態のはず（計算が終わらない）はずである．試してみよう．
+					実は，現実には，フィボナッチ数列は，「再帰を使ってはいけない例」として有名である．</p>
+				</fyi>
+				
+			</section>
+		</section>
+		
+		<section title="フラクタル図形">
+			<p>フラクタル図形は簡単に言えば「どんなに拡大しても複雑な図形」のことをさす。(wikipedia 2011)</p>
+			<p>フラクタル図形の一種である自己相似図形は，自分自身と同じ形のミニチュアが自分の中に入れ子になっている図形をさす．</p>
+			<p>自己相似図形と再帰プログラムには深い関係があり，再帰プログラムを使ってフラクタル図形を書くことができる．</p>
+			<figure id="fig:tree" title="tree" src="image/tree" style="scale:1.0" />
+			<p>このような図形を書くには，まず繰り返される基本的な図形と変換ルールを考える．この場合は以下のように「Y」に小さな「Y」を足していく
+			プログラムを考える．</p>
+			<figure id="fig:maketree" title="maketree" src="image/maketree" style="scale:1.0" />
+			<p>まず，「Y」を描くプログラムを書く．ここで一回テストしてみることが重要である．
+			（いきなり再帰のプログラム書こうとした先輩は，ことごとく失敗しています！）</p>
+			<text.turtle.applet class="DrawY" chapter="&CHAPTER;"/>	
+			<p>次に，大きな「Y」の先に小さな「Y」を書くように，再帰呼び出しを行う．再帰の終点も忘れずに！</p>
+			<text.turtle.applet class="DrawTree" chapter="&CHAPTER;"/>	
+			
+			<p>このプログラムのメソッドの呼出し過程を表示すると，次のようになる．</p>
+			<text.turtle.applet class="DrawTreeWithPrint" chapter="&CHAPTER;"/>
+				<console>
+					<![CDATA[
+drawY(50)
+	drawY(25)
+		drawY(12)
+			drawY(6)
+				drawY(3)
+				//
+				drawY(3)
+				//
+			//
+			drawY(6)
+				drawY(3)
+				//
+				drawY(3)
+				//
+			//
+		//
+		drawY(12)
+			drawY(6)
+				drawY(3)
+				//
+				drawY(3)
+				//
+			//
+			drawY(6)
+				drawY(3)
+				//
+				drawY(3)
+				//
+			//
+		//
+	//
+	drawY(25)
+		drawY(12)
+			drawY(6)
+				drawY(3)
+				//
+				drawY(3)
+				//
+			//
+			drawY(6)
+				drawY(3)
+				//
+				drawY(3)
+				//
+			//
+		//
+		drawY(12)
+			drawY(6)
+				drawY(3)
+				//
+				drawY(3)
+				//
+			//
+			drawY(6)
+				drawY(3)
+				//
+				drawY(3)
+				//
+			//
+		//
+	//
+//]]>			
+				</console>					
+
+			<p>（呼び出し過程もフラクタル図形になっているところが印象的である．）</p>	
+		</section>
+		
+		<section title="練習問題">
+			<section title="自然な木を描こう">
+				<p>木を描くサンプルプログラムを改造して、自然な木を描くプログラムにしよう。</p>
+				<p>【自然な木に見せるためのヒント】</p>
+												
+				<ul>
+					<li>小さい枝の生える角度と長さを乱数を使って決めるようにする。</li>
+					<ul>						
+						<li>角度は-45度から45度の間にする。</li>
+						<li>長さは元の枝の長さの0.6から0.9倍くらいの長さにする。</li>
+					</ul>
+					<li>枝から生える枝の数を、２本から３本にする．</li>
+				</ul>				
+				
+				<p>ファイル名は「NaturalTree.java」とすること．</p>
+				<!--  <figure id="fig:cooltree" title="cooltree" src="image/cooltree" style="scale:1.0" /> -->
+			</section>
+			
+			<section title="フラクタル図形を描こう">
+				<p>次に示すフラクタル図形から一つ選んで描いてみましょう．</p>
+				
+				<p>コッホ曲線</p>
+				<figure id="fig:koch" title="koch" src="image/koch" style="scale:1.0" />
+				<p>ギャスケット</p>
+				<figure id="fig:gasket" title="gasket" src="image/gasket" style="scale:1.0" />
+				<p>スーパースター</p>
+				<figure id="fig:superstar" title="superstar" src="image/superstar" style="scale:1.0" />
+				<p>トーナメント表</p>
+				<figure id="fig:tournament" title="tournament" src="image/tournament" style="scale:1.0" />
+				
+				<p>ファイル名は「Fractal.java」とすること．</p>
+			</section>
+			
+			<section title="ひまわりの絵を描こう">
+				<p><a href="http://www.rd.mmtr.or.jp/~bunryu/pain1.shtml">この</a>サイトを参考にして，ひまわりの絵を描いてみましょう．</p>
+				<p>ファイル名は「SunFlower.java」とすること．</p>
+			</section>
+			
+			<section title="葉っぱの絵を描こう">
+				<p><a href="http://kamakura.ryoma.co.jp/~aoki/paradigm/furactal.htm">この</a>サイトを参考にして，葉っぱの絵を描いてみましょう．</p>
+				<p>ファイル名は「Leaf.java」とすること．</p>
+			</section>
+			
+		</section>
+		
+	</body>
+</doc>
+
+

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Shift_JIS"?>
+
+<!--$$Id: build.xml,v 1.2 2007/10/08 11:44:04 macchan Exp $$-->
+
+<project basedir="." default="all">
+
+	<!-- 
+		#######################変数#####################
+	-->	
+	<property environment="env"/>
+	
+	<property name="project.name" value="TurtleCafe"/>
+	<property name="cvsignore.files" value="**/.*cvsignore"/>
+	<property name="src.dir" value="TurtleCafe"/>	
+	<property name="work.dir" value="working"/>	
+	
+	<!-- 
+		#######################コマンド#####################
+	-->
+	<!-- すべて -->
+	<target name="all" depends=""/>
+
+	<!-- 便利コマンド類 -->
+
+	<!-- 
+		#######################make#####################
+	-->	
+
+	<target name="makedir">
+		<!-- Javaバージョンの確認 -->
+		<echo message="java version = ${ant.java.version}"/>	
+		<!-- タイムスタンプの初期化 -->
+		<tstamp/>
+		<!-- 出力先の設定 -->
+		<delete dir="${work.dir}"/>
+		<mkdir dir="${work.dir}"/>
+		<copy todir="${work.dir}" includeemptydirs="no">
+			<fileset dir="${src.dir}"/>
+		</copy>
+		<ant dir="${work.dir}" target="clean" inheritAll="false"/>
+	</target>
+
+	<target name="createzip">
+		<tstamp/>
+		<exec executable="direat.bat" dir="${work.dir}">
+			<arg line="CVS"/>
+		</exec>
+		<zip destfile="${project.name}-${DSTAMP}.zip" basedir="${work.dir}"/>				
+	</target>
+	
+	<!-- お掃除 -->
+	<target name="clean">
+		<!-- 出力先のお掃除 -->
+		<delete dir="${work.dir}"/>
+	</target>
+
+</project>

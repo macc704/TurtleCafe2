@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='Shift_JIS' ?>
+
+<!DOCTYPE doc SYSTEM "../smartdoc.dtd"[
+<!ENTITY CHAPTER "chapter16">
+]>
+
+<doc xml:lang='ja'>
+
+	<head>
+		<title>集合データ構造とアルゴリズム（２）：辞書</title>
+	</head>
+
+	<body>
+
+		<section title="学習目標">
+			<ul>
+				<li>辞書の概念を理解し，プログラムが書けるようになる</li>
+			</ul>
+		</section>
+
+		<section title="入力プログラムの要素技術">
+			<section title="InputTurtle">
+				<p>
+					辞書を作るには、タートル画面から入力を受け付ける部品が必要です。
+					入力を受け付けるには入力タートルを使います（まだひらがなしか入力できません、すみません）。
+				</p>
+				<section title="おうむ返しプログラム（入力タートルバージョン）">
+					<p>このプログラムは、入力された文字をそのまま表示するプログラムです。</p>
+					<text.turtle.applet class="InputTurtleSample1" chapter="&CHAPTER;" />
+					<p>
+						キー入力を受けつけ、エンターキーが押されたら、おうむ返しをして、入力ボックスをリセットしています。
+					</p>
+				</section>
+				<section title="2つの入力タートルの制御">
+					<p>
+						上記プログラムでは、入力タートルを2つ以上作った場合に、両方のタートルに文字が入力されてしまいます。
+						これを解決する方法を次のプログラムに示します。このプログラムは、入力タートルを2つを作り、
+						キー操作によってどちらの入力ボックスを使うか切り替えるプログラムです。
+					</p>
+					<text.turtle.applet class="InputTurtleSample2" chapter="&CHAPTER;" />
+					<p>スペースキーが押されたら、フォーカスを切り替えています。</p>
+				</section>
+				<section title="InputTurtleの仕様">
+					<dl>
+						<dt>String text()</dt>
+						<dd>入力タートルの内容を取得します</dd>
+						<dt>void setActive(boolean active)</dt>
+						<dd>入力受付状態を設定します</dd>
+						<dt>boolean isActive()</dt>
+						<dd>入力受付状態を調べます</dd>
+						<dt>void clearText()</dt>
+						<dd>入力タートルの内容を消去します</dd>
+						<dt>void toJapaneseMode()</dt>
+						<dd>日本語入力モードにします。入力できるのはかなのみです。</dd>
+						<dt>void toEnglishMode()</dt>
+						<dd>英語入力モードにします。入力できるのは小文字のみです。</dd>
+						<dt>int fontsize()</dt>
+						<dd>フォントサイズを取得します</dd>
+						<dt>void fontsize(int size)</dt>
+						<dd>フォントサイズを指定します</dd>
+					</dl>
+				</section>
+			</section>
+		</section>
+		
+		<section title="辞書のプログラム">
+			<p>このプログラムは、２つのリストを使った絵辞書プログラムです。</p>
+			<p>
+				１つのリストに、索引となるキーを入れ、もうひとつのリストにはデータを入れています。
+				ユーザが入力した語が、キーのリストにあるかどうか調べて、
+				あれば、キーのリストのカーソル位置と同じカーソル位置にあるデータを返します。
+			</p>
+			<text.turtle.applet class="DictionaryApplication" chapter="&CHAPTER;" />
+			
+			<fyi title="文字列の内容が一致しているか調べる命令">
+				<p>このプログラムでは文字列の内容が一致しているかどうか調べるために、equals命令を使っています。</p>
+				<program><![CDATA[
+if (key.getStringAtCursor().equals(searchKey))]]>
+				</program>
+				<p>数値の同値性を調べるためにこれまで利用してきた==命令は、
+					文字列の同値性を調べるためには使えません（正確には、使えます（コンパイルは通る）が、
+					内容ではなくオブジェクトが同じかどうか比較してしまうので、誤った結果になる場合があります）。
+				</p>
+				<p>文字列の内容が一致しているかどうか調べたいときは、A.equals(B)のように、
+					equals命令を使う必要があります（A,Bはそれぞれ文字列型の変数）。	</p>
+			</fyi>
+		</section>
+
+		<section title="練習問題">	
+			<section title="入力タートルの練習">
+				<p>入力タートルを１つ用意し、スペースキーで入力モード（日本語、英語）を切り替えるプログラムを作ってみよう。</p>
+				<p>ファイル名は「ChangeMode.java」とすること．</p>
+			</section>
+							
+			<section title="作文さん">
+				<p>このプログラムは、リストに名詞と動詞を保存して、作文するプログラムです。</p>
+				<p>	（リストは、ウインドウの下のほうに隠れています。ウインドウを広げてみてください）</p>
+				<text.turtle.applet.nodownload class="SakubunApplication" chapter="&CHAPTER;"/>
+				
+				<fyi title="実装のヒント">
+					<p>このプログラムでは、入力ボックスをコピーし、コピーしたものをリストに入れています。</p>
+					<p>以下のプログラムでは、inputという入力タートルの内容をテキストタートルにコピーし、
+					そのテキストタートルをnounsというリストに入れています。</p>
+						<program><![CDATA[
+nouns.addLast(new TextTurtle(input.text()));
+						]]></program>
+				</fyi>
+				
+				<p>ファイル名は「Sakubun.java」とすること．</p>
+			</section>
+			
+			<section title="タイピングゲーム">
+				<p>このプログラムは、リストに絵と単語を保存して、タイピングゲームをするプログラムです。</p>
+				<p>（リストは、ウインドウの下のほうに隠れています。ウインドウを広げてみてください）</p>
+				<text.turtle.applet.nodownload class="TypingApplication" chapter="&CHAPTER;"/>
+				
+				<fyi title="実装のヒント">
+					<p>このプログラムでは、時間を扱います。以下のプログラムは、開始時間をミリ秒で取得するプログラムです。</p>
+					<p>long型は、int型よりも桁数の大きな数字を扱える型です。</p>
+						<program><![CDATA[
+long startTime = System.currentTimeMillis();
+						]]></program>
+					<p>
+						以下のように、開始時間と終了時間の差（ミリ秒単位）を求め、
+						それを分単位に変換し、タイピング文字数をかかった時間（分）で割ることで、
+						タイピング速度を求めることができます。
+					</p>
+					<program><![CDATA[
+long endTime = System.currentTimeMillis();
+long miliTime = endTime - startTime;//かかった時間（ミリ秒）
+double time = (double) miliTime / (double) 1000 / (double) 60;//かかった時間(分)
+int speed = (int) (inputCharacterCount / time);
+result.text("あなたのタイピング速度は" + speed + "文字/分です．");
+					]]></program>
+				</fyi>
+				<p>ファイル名は「Typing.java」とすること．</p>
+			</section>
+		</section>
+
+	</body>
+</doc>
+
+

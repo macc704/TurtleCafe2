@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='Shift_JIS' ?>
+
+<!DOCTYPE doc SYSTEM "../smartdoc.dtd"[
+<!ENTITY CHAPTER "chapter14">
+]>
+
+<doc xml:lang='ja'>
+
+	<head>
+		<title>集合データ構造入門</title>
+	</head>
+
+	<body>
+		<section title="学習目標">
+			<ul>
+				<li>リストタートル(ListTurtle)の概念を理解し，応用したプログラムが書けるようになる</li>
+				<li>Javaの標準ライブラリでの集合データ構造（LinkedList, 配列）を使ったプログラムが読めるようになる</li>
+			</ul>
+		</section>
+		
+		<section title="集合データ構造">
+			<section title="ListTurtle入門">
+				<p>これまでのプログラムでも，同種の要素を複数扱う必要があるプログラムがありました．
+				例えば，次の４匹の亀を扱うプログラムを考えてみましょう．</p>
+				<text.turtle.applet class="FourTurtles0" chapter="&CHAPTER;"/>
+				<p>上記プログラムの問題は，カメを増やすたびに変数を追加したり，それに対応する動きのプログラムを書かなければならないことです．
+				その結果，プログラム中に似たようなプログラムが繰り返しでてきてしまっています．</p>
+				<p>この章では，人間がプログラムを繰り返し書くのではなく，コンピュータに繰り返しをさせることで同様の目的を達成する方法を考えます．</p>
+				<p>必要なのは「集合データ構造」です．「集合データ構造」とは，同種のデータを一括してプログラムで扱うことの出来る仕組みで，
+				繰り返し（これはもう習得済みですね）と組み合わせることで，大量のデータを少量のプログラムで指示することが出来ます．</p>
+				<p>次のプログラムでは，タートルで使える集合データ構造の，ListTurtleクラスを使って４匹の亀を扱うプログラムを書いてみたものです．</p>
+				<text.turtle.applet class="FourTurtles1" chapter="&CHAPTER;"/>
+				<p>21行目でListTurtleを作っています．他のオブジェクトの生成と基本的には同じですが，ListTurtleに入れることの出来るオブジェクトの型を＜＞の中に書きます（２カ所）．</p>
+				<program><![CDATA[				
+	ListTurtle<Turtle> turtles = new ListTurtle<Turtle>();
+				]]></program>
+				<fyi title="リストの変数名">
+					<p>変数名は任意ですが，リストに入るものの名前の複数形にすると良いでしょう．</p>
+				</fyi>
+				<p>ListTurtleで使える基本的なメソッドとして，追加と削除，閲覧があります．</p>
+					<ul>
+						<li>追加する：　void add(「追加するオブジェクト」)</li>						
+						<li>i番目を削除する： Object remove(int i)</li>
+						<li>i番目の中身を見る：　Object get(int i)</li>
+					</ul>
+				<p>これらのメソッドを繰り返しを使って呼ぶことで，リストに入っている複数のオブジェクトすべてに対して，１行で命令をすることが出来ます．</p>
+				<fyi title="集合データ構造と番地">
+					<p>ListTurtleでも，Java標準ライブラリでも，要素の番地は0番地から始まり，[要素数-1]番地まで存在します．</p>				
+					<p>メモリアドレスの扱いやすさの関係から伝統的にC言語では0番地から始まる言語仕様で，C言語に影響を受けたJava言語も0番地から始まる仕様になっています．</p>
+					<p>しかしながら，人間にとっては1番地から始まり，[要素数]番地まで存在する方がわかりやすいので，
+					教育用言語を中心に１番地から始まるプログラミング言語も多く存在します．（例えばSmalltalk，Pascalなど）．</p>
+				</fyi>				
+				<fyi title="連続メソッド呼び出し">
+					<p>戻り値を変数に格納するのではなく，メソッドを次々と呼び出すことが出来ます．例えば，３０行目では次のようなプログラムがあります．</p>
+					<program><![CDATA[				
+	turtles.get(0).warp(100, 100);
+					]]></program>
+					<p>これは，turtlesリストの0番目の要素を取り出して，その戻り値（１つめのタートル）に対して，warpメソッドを呼び出すという意味になります．</p>
+					<p>（戻り値が返ってくる限りは，１行で無制限にメソッドを呼び出すことが出来ます．）</p>
+				</fyi>
+				<p>ListTurtleで使える便利な機能として，カーソル機能があります．主な機能を以下に示します．</p>
+					<ul>				
+						<li>カーソルを進める： int moveCursorToNext()</li>						
+						<li>カーソル位置のオブジェクトを取得する： Object getObjectAtCursor()</li>
+					</ul>
+				<p>カーソルを進めて，カーソル位置のオブジェクトを取得して何か命令を行うことを繰り返すことによって，複数のオブジェクトすべてに対して，１行で命令をすることが出来ます．</p>
+				<p>（カーソルがリストの最後にあるときにカーソルを進めると，最初に戻るところが便利なところです．）</p>					
+			</section>
+			
+			<section title="アニメーションへの応用">
+				<p>ListTurtleをアニメーションに応用した例を示します．</p>
+				<text.turtle.applet class="WalkingMan2" chapter="&CHAPTER;"/>
+				<fyi title="autohideモード">
+					<p>アニメーションをするときには，リストに入れたオブジェクトは，元の位置（キャンバス）からは消去して欲しいことがあります．
+					そんなときに便利なのがListTurtleのautohideモードの指定です．autohideモードでは，リストは自動的にリストに入ってきたものをhide()してくれます．</p>
+					<p>autohideモードの指定には，new ListTurtleの所で，(true)の引数を与えます．</p>
+				</fyi>
+			</section>	
+		</section>	
+
+		<section title="Java標準ライブラリでの集合データ構造">
+			<p>ListTurtleは中身が見えて便利なのですが，Java標準ライブラリでは使えないのが難点です．
+			将来はJava標準ライブラリで書かれたプログラムを読む必要もあるので，標準ライブラリ方式も勉強しておきましょう．</p>
+			
+			<section title="カーソルを使わない方法">
+				<p>Java標準ライブラリには「カーソル」がありません．
+					従って，先に説明した４匹の亀のアニメーションについて，カーソルを使わない方法で書き直しておきましょう．</p>
+				<text.turtle.applet class="FourTurtles2" chapter="&CHAPTER;"/>
+			</section>			
+			
+			<section title="LinkedList">
+				<p>Java標準ライブラリの書き方になります．表示されないことと，import文以外はほとんど書き方は変わりません．</p>
+				<text.turtle.applet class="FourTurtles3" chapter="&CHAPTER;"/>
+						
+				<fyi title="Java標準ライブラリのimport">
+					<p>Java標準ライブラリを使うには，import文を使う必要があるときがあります．前のプログラムでは，１行目に書いてありました．</p>
+						<program><![CDATA[				
+	import java.util.LinkedList;
+						]]></program>
+					<p>import宣言は，クラスブロックが始まる前の所（上の方）に書きます．</p>
+					<p>import宣言をすると，正式名称がjava.util.LinkedListであるクラスが，LinkedListと省略してプログラムで扱うことが出来るようになります．</p>			
+				</fyi>
+			</section>
+
+			<section title="配列">
+				<p>最近のオブジェクト指向言語ではListを使うのが主流ですが，まだライブラリで一部使われているのが配列です．</p>
+				<text.turtle.applet class="FourTurtles4" chapter="&CHAPTER;"/>
+				<p>配列は，要素の上限を決めないと使えないところが（LinkedListはメモリの許す限り無限）欠点で，最近ではあまり使われません．
+					しかしながら，2次元配列など配列が活躍する場面もまだあるようです．</p>
+			</section>
+
+		</section>
+		
+		<section title="ListTurtleの命令リスト">
+
+			<section title="リストを作る命令">
+				<dl>
+					<dt>ListTurtle＜[要素のクラス名]＞ [変数名] = new ListTurtle＜[要素のクラス名]＞()</dt>
+					<dd>リストタートルを作成します．</dd>
+					<dt>ListTurtle＜[要素のクラス名]＞ [変数名] = new ListTurtle＜[要素のクラス名]＞(true)</dt>
+					<dd>autohideモードで，リストタートルを作成します．</dd>		
+					<dt>ListTurtle＜[要素のクラス名]＞ [変数名] = new ListTurtle＜[要素のクラス名]＞(true, "[名前]")</dt>
+					<dd>autohideモードで，名前付きで，リストタートルを作成します．</dd>						
+				</dl>
+			</section>
+			
+			<p>以下，「T」とは，リスト作成時に＜[要素のクラス名]＞ で指定したクラスに置き換わることを示しています．</p>
+			
+			<section title="追加と削除">				
+				<dl>
+					<dt>void add(T object)</dt>
+					<dd>objectをリストの最後に追加します．addLast(object)メソッドと同様です．</dd>
+					<dt>void addLast(T object)</dt>
+					<dd>objectをリストの最後に追加します．</dd>		
+					<dt>void addFirst(T object)</dt>
+					<dd>objectをリストの最初に追加します．</dd>
+					<dt>void add(int index, T object)</dt>
+					<dd>indexの位置に要素を追加します．</dd>
+					<dt>void addAll(ListTurtle from)</dt>
+					<dd>fromリストの要素すべてをこのリストに追加します．</dd>					
+					<dt>void moveAllTo(ListTurtle to)</dt>
+					<dd>このリストの要素をすべてtoリストへ移動します．</dd>						
+					<dt>T remove(T object)</dt>					
+					<dd>要素を削除します．</dd>
+					<dt>T remove(int i)</dt>
+					<dd>i番目の要素を削除します．</dd>		
+					<dt>T removeFirst()</dt>
+					<dd>最初の要素を削除します．</dd>	
+					<dt>T removeLast()</dt>
+					<dd>最後の要素を削除します．</dd>						
+					<dt>void removeAll()</dt>
+					<dd>すべての要素を削除します．</dd>					
+				</dl>
+			</section>
+			
+			<section title="取得関係">
+				<dl>
+					<dt>T get(int i)</dt>
+					<dd>i番地の要素を取得します．（要素は0番地から始まり，[要素数-1]番地まで存在します．）</dd>
+					<dt>int getSize()</dt>
+					<dd>要素の数を返します</dd>
+				</dl>
+			</section>
+
+			<section title="カーソル関係">
+				<dl>
+					<dt>int getCursor()</dt>
+					<dd>カーソル位置を取得します．</dd>
+					<dt>void setCursor(int newCursor)</dt>
+					<dd>カーソル位置を設定します．</dd>		
+					<dt>void moveCursorToNext()</dt>
+					<dd>カーソルを前に進めます．（最後の要素の場合は先頭に戻ります．）</dd>
+					<dt>void moveCursorToPrevious()</dt>
+					<dd>カーソルを後ろに進めます．（先頭の要素の場合は最後に飛びます．）</dd>					
+					<dt>T getObjectAtCursor()</dt>
+					<dd>カーソル位置にある要素を取得します．</dd>	
+					<dt>void addToCursor(T object)</dt>
+					<dd>カーソル位置(の前)に要素を追加します． （addToBeforeCursor()と同じです）</dd>	
+					<dt>void addToBeforeCursor(T object)</dt>
+					<dd>カーソル位置（の前）に要素を追加します．</dd>	
+					<dt>void addToAfterCursor(T object)</dt>
+					<dd>カーソル位置（の後）に要素を追加します．</dd>						
+					<dt>T removeAtCursor()</dt>
+					<dd>カーソル位置にある要素を削除します．</dd>	
+					<dt>int getNumberAtCursor()</dt>					
+					<dd>カーソル位置にある要素の数値表現を返します．(1.5以上では推奨されません．CardTurtleのgetNumber()を使ってください)</dd>
+					<dt>String getStringAtCursor()</dt>
+					<dd>カーソル位置にある要素の文字列表現を返します．(1.5以上では推奨されません．CardTurtleのgetText()を使ってください)</dd>														
+				</dl>
+			</section>
+
+			<section title="その他の命令">
+				<dl>
+					<dt>void shuffle()</dt>
+					<dd>中身をかきまぜます。</dd>
+					<dt>void setBgColor(Color bgColor)</dt>
+					<dd>背景の色を変更します．</dd>					
+				</dl>
+			</section>
+		</section>			
+
+		<section title="練習問題">			
+			<section title="アニメーションをListTurtleを使って作り直そう">
+				<p>「0655アニメーションを作ろう」で作ったプログラムについて，ListTurtleを使って作り直してみてください．</p>
+				<p>ファイル名は「Zero655List.java」とすること．</p>
+			</section>
+			<section title="Java標準ライブラリを使って作り直そう">
+				<p>上記について，LinkedListを使って作り直してみてください．</p>
+				<p>ファイル名は「Zero655LinkedList.java」とすること．</p>
+			</section>			
+			<section title="大量流れ星アニメーションを作ろう">
+				<p>「流れ星アニメーションを作ろう」で作ったプログラムについてListTurtleを使って作り直し，たくさんの星が流れるアニメーションを作ってみてください．</p>
+				<text.turtle.applet.nodownload class="Snows" chapter="&CHAPTER;"/>
+				<p>ファイル名は「SuperShootingStar.java」とすること．</p>
+			</section>
+		</section>
+
+	</body>
+</doc>
+
+

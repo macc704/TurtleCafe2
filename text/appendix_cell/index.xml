@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='Shift_JIS' ?>
+
+<!DOCTYPE doc SYSTEM "../smartdoc.dtd"[
+<!ENTITY CHAPTER "appendix_cell">
+]>
+
+<doc xml:lang='ja'>
+
+	<head>
+		<title>セル・オートマトン</title>
+	</head>
+
+	<body>
+	
+		<section title="セルオートマトンとは">
+			<p>格子状のセルと単純な規則からなる、離散的計算モデルである。
+			計算可能性理論、数学、理論生物学などの研究で利用される。
+			非常に単純化されたモデルであるが、生命現象、結晶の成長、乱流といった複雑な自然現象を模した、驚くほどに豊かな結果を与えてくれる。
+			(wikipedia 2011/12/18)
+			</p>
+			<p>百聞は一見にしかず，プログラムでセルオートマトンの美しさを体験してみましょう．</p>
+		</section>	
+
+		<section title="１次元セルオートマトン">
+		
+			<section title="CellTurtleの基本的な使い方">
+				<p>セルオートマトンのプログラムを書くには，CellTurtleを使います。以下のプログラムを実行して，タートルの動きを見てみましょう．</p>			
+				<text.turtle.applet class="Cell1DSample" chapter="&CHAPTER;"/>
+				<p>タートルの操作は基本的には同じですが，fd(x)の命令では，１ドットではなくて，１コマ進みます．
+				１コマの大きさは，new CellTurtle(x)のところのxで指定します．</p>
+				<p>セルオートマトンの１行目は「種」です．一つだけ黒いセルを作ります.　mark()メソッドで足元を黒いセルにすることができます．</p>
+				<p>2行目からの処理では，isMarkメソッドを使って前の行のセルが黒かどうか調べて，ルールにマッチするときにmarkをつけています．</p>
+				<p>isMarkメソッドの引数1, 4, 7については下記を参照のこと．</p>				
+				<figure id="fig:kinbo" title="kinbo" src="image/kinbo" style="scale:1.0" />
+				<p>(「CellTurtleで利用できる命令＞位置について」にも同様の解説があります．)</p>
+			</section>
+			
+			<section title="ルール">
+				<p>１次元のセルオートマトンでは，前の行の3つのセルのパターンからそのセルが白か黒かを決めます．
+				3つのセルの組み合わせは2の3乗=8パターンあるので，その8パターンについてのルールが決まっている必要があります．
+				それらのパターンは，例えば以下のような具合です．（各ルールに組み合わせの番号がついています）</p>
+				<figure id="fig:1d-4rules" title="1d-4rules" src="image/1d-4rules" style="scale:1.0" />
+				<p>上図の250番のルールで示されるセルオートマトンを，以下のプログラムで実装してみます．</p>				
+				<text.turtle.applet class="Cell1DSample2" chapter="&CHAPTER;"/>
+				<p>8パターンのルールの組み合わせなので，全部で256パターンのルールがあることになります．</p>
+				<figure id="fig:1d-rule-all" title="1d-rule-all" src="image/1d-rule-all" style="scale:1.0" />
+			</section>
+			
+			<section title="アサリの貝殻の模様と１次元オートマトン">
+				<p>どうでしょう？似ていませんか？</p>
+				<figure id="fig:shell01" title="shell01" src="image/shell01" style="scale:1.0" />
+				<figure id="fig:shell02" title="shell02" src="image/shell02" style="scale:1.0" />
+			</section>
+		</section>
+
+		<section title="２次元セルオートマトン">
+			<p>セルオートマトンを２次元に拡張することができます。</p>
+			<p>２次元のセルオートマトンでは，あるセルの近傍にある４つのセル（上下左右）のパターンを読み取り，次のターンのそのセルの状態を決めます。</p>
+			<figure id="fig:2d-rule" title="2d-rule" src="image/2d-rule" style="scale:1.0" />
+			<p>以下，すべてのセルに対して，黒いセルが見つかったらその近傍の４つのセルを反転させる例です．</p>
+			<text.turtle.applet class="Cell2DSample" chapter="&CHAPTER;"/>
+			<p>2次元セルオートマトンでは，	格子を書き換えていくので，書き換えのタイミングを教えてあげる必要があります．
+			このCellTurtleライブラリでは，書き換えのタイミングでsleep(0.1)とbeginNextTurn()メソッドを呼んでください．</p>
+			<p>CellTurtleプログラムでは，mark()のほかに，位置を指定してセルをマークするmark(int location),
+			白いセルに戻すunmark(), unmark(int location)，白黒を反転するflip(), flip(int location)等も使えます．
+			</p>
+		</section>
+
+		<section title="CellTurtleで利用できる命令">
+		
+			<section title="「位置」について">
+				<p>タートルの位置を中心に３×３の範囲で，位置に番号がついています．markされているか（黒いセルかどうか）を調べることができます。</p>
+				<p>位置の番号は以下の図の通りです．(覚えやすいように携帯電話のボタン配列と同じにしました．）</p>
+				<figure id="fig:kinbo" title="kinbo" src="image/kinbo" style="scale:1.0" />
+			</section>
+		
+			<section title="移動の命令">
+				<dl>
+					<dt>void fd(int x)</dt>
+					<dd>タートルが前にxマス移動します</dd>
+
+					<dt>void fd()</dt>
+					<dd>タートルが前に1マス移動します</dd>
+
+					<dt>void bk(int x)</dt>
+					<dd>タートルが後ろにxマス移動します</dd>
+
+					<dt>void bk()</dt>
+					<dd>タートルが後ろに1マス移動します</dd>
+					
+					<dt>void right(double x)</dt>
+					<dd>タートルが右にxマス移動します</dd>
+					
+					<dt>void right()</dt>
+					<dd>タートルが右に1マス移動します</dd>	
+					
+					<dt>void left(double x)</dt>
+					<dd>タートルが左にxマス移動します</dd>	
+					
+					<dt>void left()</dt>
+					<dd>タートルが左に1マス移動します</dd>																	
+				</dl>
+			</section>
+							
+			<section title="CellTurtleのマーク処理命令">
+				<dl>
+					<dt>boolean isMarked(int position)</dt>
+					<dd>引数positionで与えられた「位置」にマークがついているか（黒いセルかどうか）を調べます．</dd>
+
+					<dt>boolean isMarked()</dt>
+					<dd>足元にマークがついているか調べます．isMarked(5)と効力は同じです．</dd>
+					
+					<dt>void mark(int position)</dt>
+					<dd>引数positionで与えられた「位置」にマークをつけます（セルを黒くします）．</dd>
+
+					<dt>void mark()</dt>
+					<dd>足元にマークをつけます．mark(5)と効力は同じです．</dd>
+					
+					<dt>void unmark(int position)</dt>
+					<dd>引数positionで与えられた「位置」のマークをはずします（セルを白くします）．</dd>
+
+					<dt>void mark()</dt>
+					<dd>足元のマークをはずします．unmark(5)と効力は同じです．</dd>
+					
+					<dt>void unmark(int position)</dt>
+					<dd>引数positionで与えられた「位置」のマークをはずします（セルを白くします）．</dd>
+
+					<dt>void mark()</dt>
+					<dd>足元のマークをはずします．unmark(5)と効力は同じです．</dd>
+					
+					<dt>void flip(int position)</dt>
+					<dd>引数positionで与えられた「位置」のマークを反転します（黒ければ白に，白ければ黒にします）．</dd>
+
+					<dt>void flip()</dt>
+					<dd>足元のマークを反転します．flip(5)と効力は同じです．</dd>
+				</dl>
+			</section>
+			
+			<section title="２次元オートマトンのターン処理命令">
+				<dl>
+					<dt>void beginNextTurn()</dt>
+					<dd>ターンを始める前に呼んでください．（ターンモードに入ると，次にこのメソッドが呼ばれるまで，前ターンのセルの状態を取得できます．）</dd>
+
+					<dt>void endTurn()</dt>
+					<dd>ターンが終了するときに呼んでください．（即時書き換えモードに遷移するだけなので，呼ばなくても動きます．）</dd>
+				</dl>
+			</section>		
+		</section>		
+		
+		<section title="練習問題">
+		
+			<section title="１次元セルオートマトンのいろいろなルールを試してみよう">
+				<p>１次元セルオートマトンの例題を改変して，いろいろなルールでオートマトンを試してみよう。</p>
+				<p>ルールを変えると，例えば以下のように模様が変わります。</p>
+			 	<figure id="fig:1d-ex" title="1d-ex" src="image/1d-ex" style="scale:1.0" />
+			 	<p>大きさも増やしてみましょう（変数を使うといいですネ！）</p>
+			 	<p>好きなルールを見つけて、友達と比較しよう。</p>
+			 	<p>ファイル名は「Cell.java」とすること．</p>
+			</section>
+			
+			<section title="ルールをメソッドにしてみよう">
+				<p>例題のままではルールを変更するのが多少ややこしいので，簡単にルールを変えられるようにルールをメソッドにしてみましょう。
+				具体的には，ルールを調べてmark()を読んでいる箇所について，</p>
+					<program>
+						<![CDATA[
+void mark(CellTurtle ct, int r1, int r2, int r3, int r4, int r5, int r6, int r7, int r8){...}]]>
+					</program>
+				<p>というメソッドを作り，例えば</p>
+					<program>
+						<![CDATA[
+mark(ct, 1, 0, 0, 1, 1, 1, 1, 1);]]>
+					</program>
+				<p>というように呼び出すことで特定のルールを適用できるようにしてみましょう．</p>
+				<p>ファイル名は「CellByMethod.java」とすること．</p>	
+			</section>
+			
+			<section title="ルールをメソッドにしてみよう改">
+				<p>前問題について，ルール番号でmarkできるよう，すなわち，</p>
+					<program>
+						<![CDATA[
+void mark(CellTurtle ct, int rule){...}]]>
+					</program>
+				<p>というメソッドを作って，8つのルールに変換するメソッドを作ってみよう．</p>
+				<p>ちなみに中級以上では，これは１行で書いてほしい．（しかし，ビット演算とシフト演算が必要だ！）</p>
+				<p>ファイル名は「CellByMethod2.java」とすること．</p>		
+			</section>	
+			
+			<section title="2次元セルオートマトンを試してみよう">
+				<p>２次元セルオートマトンを作ってみよう。</p>
+				<p>まず，4つの近傍のいずれかが黒いセルならば，自分を黒くするルールで次のひし形ができるかテストしてみよう。</p>
+			 	<figure id="fig:2d-all" title="2d-all" src="image/2d-all" style="scale:1.0" />
+				<p>次に，4つの近傍のうち，黒いセルの数が1または4の時，自分を黒くするルールで次の模様ができるかどうかテストしてみよう。</p>
+			 	<figure id="fig:2d-1or4" title="2d-1or4" src="image/2d-1or4" style="scale:1.0" />
+			 	<text.turtle.applet.nodownload class="Cell2DSample2" chapter="&CHAPTER;"/>
+			 	<p>ヒント：まず，4つの近傍のいくつがマークされているかを調べるメソッドを作ろう．</p>
+			 	<p>ファイル名は「TwoDCell.java」とすること．</p>	
+			</section>
+			
+			<section title="2次元セルオートマトンのいろいろなルールを試してみよう">
+				<p>前の課題で作ったルールを改変して，いろいろなルールでオートマトンを試してみよう。</p>
+				<p>好きなルールを見つけて、友達と比較しよう。</p>	
+				<p>ファイル名は「MyTwoDCell.java」とすること．</p>	
+			</section>
+			
+			<section title="ライフゲームを作ってみよう">
+				<p>セルオートマトンの応用例として，ライフゲームがある．</p>
+				<p><a href="http://ja.wikipedia.org/wiki/%E3%83%A9%E3%82%A4%E3%83%95%E3%82%B2%E3%83%BC%E3%83%A0">wikipediaのライフゲームの説明</a>
+				を参考にして，ライフゲームを作ってみよう。</p>
+				<p>参考1:銀河</p>
+				<text.turtle.applet.nodownload class="Galaxy" chapter="&CHAPTER;"/>				
+				<p>参考2:グライダー銃</p>
+				<text.turtle.applet.nodownload class="Glider" chapter="&CHAPTER;"/>
+				<p>ファイル名は「LifeGame.java」とすること．</p>
+			</section>	
+		</section>	
+		
+		<section title="参考文献">
+			<p>オートマトンの画像はStephen Wolfram，"A New Kind of Science", Wolfram Media Inc, 2002からお借りしました．</p>
+			<p>貝殻の画像は<a href="http://homepage3.nifty.com/kuebiko/science/freestdy/CellAM.htm">ここ</a>からお借りしました．</p>
+		</section>
+		
+	</body>	
+	
+</doc>
+
+
